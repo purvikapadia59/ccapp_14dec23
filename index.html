@@ -1,0 +1,49 @@
+<html>
+<head>
+	<title>Live CC App by PK</title>
+	<style>
+		* { font-size: 50px; }
+		body { background-color: azure; }
+	</style>
+</head>
+<body>
+	<center>
+		<h1>Live Currency Converter</h1>
+		<form>
+			&#36<input type="number" step=".01" placeholder="enter amt in &#36" id="dollar" required/>
+			<br/><br/>
+			&#8377<input type="number" step=".01" placeholder="enter amt in &#8377" id="rs" required/>
+		</form>
+		<script>
+			let dollar = document.getElementById("dollar");
+			let rs = document.getElementById("rs");
+
+			dollar.addEventListener("input", function() {
+				let url = "https://api.exchangerate-api.com/v4/latest/USD";
+				fetch(url)
+				.then(res => res.json())
+				.then(data => {
+					let d = parseFloat(dollar.value);
+					let r = data.rates.INR;
+					let rupees = d * r;
+					rs.value = rupees.toFixed(2);
+					})
+					.catch(err => alert("issue " + err));
+				});
+
+			rs.addEventListener("input", function() {
+				let url = "https://api.exchangerate-api.com/v4/latest/USD";
+				fetch(url)
+				.then(res => res.json())
+				.then(data => {
+					let r = parseFloat(rs.value);
+					let d = data.rates.INR;
+					let dollars = r / d;
+					dollar.value = dollars.toFixed(2);	
+					})
+					.catch(err => alert("issue " + err));
+				});
+		</script>
+	</center>
+</body>
+</html>
